@@ -1,30 +1,33 @@
-const express = require('express')
-const bodyParser = require('body-parser')
-const { randomBytes } = require('crypto')
-const cors = require('cors')
+const express = require("express");
+const bodyParser = require("body-parser");
+const { randomBytes } = require("crypto");
+const cors = require("cors");
 
 const app = express();
-app.use(bodyParser.json())
-app.use(cors())
+app.use(bodyParser.json());
+app.use(cors());
 
-const commentsByPostId = {}
+const commentsByPostId = {};
 
-app.get('/posts/:id/comments', (req, res) => {
-    res.send(commentsByPostId[req.params.id] || [])
-})
+app.get("/posts/:id/comments", (req, res) => {
+  console.log("qwe", req.params.id, commentsByPostId[req.params.id] || []);
+  res.send(commentsByPostId[req.params.id] || []);
+});
 
-app.post('/post/:id/comments', (req, res) => {
-    const commendId = randomBytes(4).toString('hex');
-    const { content } = req.body
+app.post("/posts/:id/comments", (req, res) => {
+  const commendId = randomBytes(4).toString("hex");
+  const { content } = req.body;
 
-    const comments = commentsByPostId[req.params.id] || []
+  const comments = commentsByPostId[req.params.id] || [];
 
-    comments.push({ id: commendId, content })
+  comments.push({ id: commendId, content });
 
-    commentsByPostId[req.params.id] = comments
-    res.status(201).send(comments)
-})
+  commentsByPostId[req.params.id] = comments;
+  console.log(commentsByPostId);
+
+  res.status(201).send(comments);
+});
 
 app.listen(4001, () => {
-    console.log("Listening at port")
-})
+  console.log("Listening at port");
+});
